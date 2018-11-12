@@ -1,0 +1,48 @@
+{{ extend 'layout.html'}}
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<link rel="stylesheet" href="{{=URL('static', 'font-awesome-4.6.3/css/font-awesome.min.css')}}">
+<script>
+    var getMoviesUrl = "{{=URL('api', 'get_all_movies')}}";
+    var insertMoviesUrl = "{{=URL('api', 'insert_movie')}}";
+    var getCommentsUrl = "{{=URL('api', 'get_comments')}}";
+</script>
+
+<div id="app">
+    <div class="insert-movie">
+        <input v-model="newMovieTitle" type="text" placeholder="Title"/><br><br>
+        <textarea v-model="newMovieDescription" placeholder="Description"></textarea><br><br>
+        <input v-model="newMovieRating" type="text" placeholder="Rating"/><br><br>
+        <button v-on:click="submitMovie">Submit Movie</button>
+    </div><br><br>
+
+    <h1>Movies</h1>
+    
+    <div>
+        <div v-for="movie in movies" class="movie-box">
+            <div>
+                <p>${ movie.title }</p>
+                <p>${ movie.description }</p>
+                <p>${ movie.rating }</p>
+                <button v-if="!movie.showComments" v-on:click="showComments(movie._idx)">Add / Show Comments</button>
+                <button v-if="movie.showComments" v-on:click="hideComments(movie._idx)">Hide Comments</button>
+                <div v-if="movie.showComments" class="comment-section">
+                    <br>
+                    <button v-if="!movie.addingComment" v-on:click="toggleAddingComment(movie._idx)">Add Comment</button>
+                    <div v-if="movie.addingComment">
+                        <textarea v-model="movie.newComment"></textarea>
+                        <button v-on:click="saveComment(movie._idx); toggleAddingComment(movie._idx);">Save</button>
+                    </div>
+                    <div v-if="movie.comments.length > 0" v-for="comment in movie.comments" class="comment">
+                        ${ comment.body }
+                    </div>
+                    <div v-if="movie.comments.length <= 0">
+                        This movie has no comments.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="{{=URL('static','js/index.js')}}"></script>
+
