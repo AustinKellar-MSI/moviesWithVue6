@@ -29,3 +29,10 @@ def get_all_movies():
 def get_comments():
     comments = db(db.comments.movie_id == request.vars.id).select()
     return response.json(dict(comments=comments))
+
+def insert_comment():
+    id = db.comments.insert(
+        movie_id=request.vars.movie_id,
+        body=request.vars.body
+    )
+    return response.json(dict(id=id))

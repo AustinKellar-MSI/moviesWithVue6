@@ -54,12 +54,17 @@ var toggleAddingComment = function(idx) {
 };
 
 var saveComment = function(idx) {
-    app.movies[idx].comments.unshift({
-        id: undefined,
+    // Your code goes here. Remember, we need to set the id of the new comment!
+    $.post(insertCommentUrl, {
         movie_id: app.movies[idx].id,
         body: app.movies[idx].newComment
+    }, (response) => {
+        app.movies[idx].comments.unshift({
+            id: response.id,
+            movie_id: app.movies[idx].id,
+            body: app.movies[idx].newComment
+        });
     });
-    // Your code goes here. Remember, we need to set the id of the new comment!
 };
 
 var app = new Vue({
